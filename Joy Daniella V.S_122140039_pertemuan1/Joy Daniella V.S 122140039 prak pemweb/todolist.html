@@ -1,0 +1,187 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>To-Do List - Joy Daniella V.S 122140039</title>
+    <style>
+      * {
+        letter-spacing: -0.5px;
+      }
+      body {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        font-family: Arial, Helvetica, sans-serif;
+        margin: 0;
+        padding: 0;
+        justify-content: center;
+        height: 100svh;
+      }
+      h1 {
+        margin-top: 0;
+      }
+      input[type="text"] {
+        padding: 8px;
+        margin-right: 8px;
+        border: 1px solid #ccc;
+        border-radius: 4px;
+      }
+      button {
+        padding: 8px 16px;
+        border: none;
+        border-radius: 4px;
+        background-color: #191d20;
+        color: white;
+        cursor: pointer;
+      }
+      button:hover {
+        background-color: #212224;
+      }
+      ul {
+        list-style-type: none;
+        padding: 0;
+        width: 100%;
+        max-width: 400px;
+      }
+      li {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        margin-bottom: 8px;
+        padding: 8px;
+        border: 1px solid #ccc;
+        border-radius: 4px;
+        background-color: #f9f9f9;
+      }
+      input[type="checkbox"] {
+        appearance: none;
+        width: 16px;
+        height: 16px;
+        border: 2px solid black;
+        border-radius: 4px;
+        outline: none;
+        cursor: pointer;
+        position: relative;
+        background-color: white;
+      }
+      input[type="checkbox"]:checked {
+        background-color: black;
+      }
+      input[type="checkbox"]:checked::after {
+        content: "✔";
+        font-size: 12px;
+        color: white;
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+      }
+      .task-text {
+        flex-grow: 1;
+        margin-left: 16px;
+      }
+      .completed {
+        text-decoration: line-through;
+        color: gray;
+      }
+      .delete-button {
+        margin-left: 16px;
+        background-color: #e74c3c;
+        border: none;
+        color: white;
+        padding: 4px 8px;
+        border-radius: 4px;
+        cursor: pointer;
+      }
+      .delete-button:hover {
+        background-color: #c0392b;
+      }
+      ::-webkit-scrollbar {
+        width: 0;
+      }
+    </style>
+  </head>
+  <body>
+    <h1>To-Do List</h1>
+    <input type="text" id="taskInput" placeholder="Tambahkan tugas baru" />
+    <button onclick="addTask()">Tambah</button>
+    <ul id="taskList"></ul>
+
+    <script>
+      // Load tasks from localStorage on page load
+      document.addEventListener("DOMContentLoaded", () => {
+        const savedTasks = JSON.parse(localStorage.getItem("tasks")) || [];
+        savedTasks.forEach((task) => addTaskToDOM(task.text, task.completed));
+      });
+
+      function addTask() {
+        const input = document.getElementById("taskInput");
+        const taskText = input.value.trim();
+
+        if (taskText === "") {
+          alert("Tugas tidak boleh kosong!");
+          return;
+        }
+
+        addTaskToDOM(taskText, false);
+        saveTasksToLocalStorage();
+        input.value = "";
+      }
+
+      function addTaskToDOM(text, completed) {
+        const taskList = document.getElementById("taskList");
+
+        // Create a new list item
+        const li = document.createElement("li");
+
+        // Create a checkbox
+        const checkbox = document.createElement("input");
+        checkbox.type = "checkbox";
+        checkbox.checked = completed; // Set the checkbox state based on `completed`
+        checkbox.addEventListener("change", () => {
+          li.classList.toggle("completed", checkbox.checked); // Toggle the 'completed' class
+          saveTasksToLocalStorage();
+        });
+
+        // Add the task text
+        const taskSpan = document.createElement("span");
+        taskSpan.textContent = text;
+        taskSpan.classList.add("task-text"); // Add class for styling
+        if (completed) {
+          li.classList.add("completed"); // Apply the 'completed' class if needed
+        }
+
+        // Add delete button
+        const deleteButton = document.createElement("button");
+        deleteButton.textContent = "Hapus";
+        deleteButton.classList.add("delete-button"); // Add class for styling
+        deleteButton.onclick = () => {
+          taskList.removeChild(li);
+          saveTasksToLocalStorage();
+        };
+
+        // Append elements to the list item
+        li.appendChild(checkbox);
+        li.appendChild(taskSpan);
+        li.appendChild(deleteButton);
+
+        // Append the list item to the task list
+        taskList.appendChild(li);
+      }
+
+      function saveTasksToLocalStorage() {
+        const tasks = [];
+        document.querySelectorAll("#taskList li").forEach((li) => {
+          const checkbox = li.querySelector("input[type='checkbox']");
+          const taskSpan = li.querySelector(".task-text");
+          tasks.push({
+            text: taskSpan.textContent,
+            completed: checkbox.checked,
+          });
+        });
+        localStorage.setItem("tasks", JSON.stringify(tasks));
+      }
+    </script>
+  </body>
+</html>
