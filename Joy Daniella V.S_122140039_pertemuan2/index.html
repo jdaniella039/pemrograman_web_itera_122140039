@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Personal Student Dashboard</title>
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+  <div class="container">
+    <h1>🎓 Student Dashboard</h1>
+    <div class="clock" id="clock"></div>
+    
+    <nav class="tab-menu">
+      <button class="tab active" data-tab="schedule">📅 Jadwal</button>
+      <button class="tab" data-tab="tasks">📋 Tugas</button>
+      <button class="tab" data-tab="notes">📝 Catatan</button>
+    </nav>
+
+    <div class="tab-content" id="schedule">
+      <h2>Jadwal Kuliah</h2>
+      <ul id="scheduleList"></ul>
+      <input type="text" id="scheduleInput" placeholder="Tambahkan mata kuliah" />
+      <button onclick="addSchedule()">Tambah</button>
+    </div>
+
+    <div class="tab-content hidden" id="tasks">
+      <h2>Daftar Tugas</h2>
+      <ul id="taskList"></ul>
+      <input type="text" id="taskInput" placeholder="Tambah tugas baru" />
+      <button onclick="addTask()">Tambah</button>
+    </div>
+
+    <div class="tab-content hidden" id="notes">
+      <h2>Catatan Pribadi</h2>
+      <textarea id="noteInput" placeholder="Tulis catatan di sini..."></textarea>
+      <button onclick="saveNote()">Simpan Catatan</button>
+      <p><strong>Catatan Terakhir:</strong></p>
+      <div id="savedNote"></div>
+    </div>
+  </div>
+
+  <script src="script.js"></script>
+</body>
+</html>
